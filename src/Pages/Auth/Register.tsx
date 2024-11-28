@@ -1,10 +1,12 @@
 import { useState } from "react";
-import "./RegisterStyle.scss";
+
+import { auth, db } from "../../lib/firebase";
+import { createUserWithEmailAndPassword } from "firebase/auth";
+import { doc, setDoc } from "firebase/firestore";
 
 export function Register() {
   const [formData, setFormData] = useState({
-    firstName: "",
-    lastName: "",
+    username: "",
     email: "",
     password: "",
     confirmPassword: "",
@@ -12,7 +14,7 @@ export function Register() {
 
   const [errors, setErrors] = useState<{ [key: string]: string }>({});
 
-  const onClickRegister = () => {
+  const onClickRegister = async () => {
     const validateEmail = (email: string): boolean => {
       const emailRegex =
         /^(([^<>()[\]\\.,;:\s@\"]+(\.[^<>()[\]\\.,;:\s@\"]+)*)|(\".+\"))@((\[[0-9]{1,3}\.[0-9]{1,3}\.[0-9]{1,3}\.[0-9]{1,3}\])|(([a-zA-Z\-0-9]+\.)+[a-zA-Z]{2,}))$/;
@@ -37,11 +39,8 @@ export function Register() {
     }
 
     // Validation checks
-    if (!/^[A-Za-z]+$/.test(formData.firstName)) {
-      newErrors.firstName = "First name should contain only letters.";
-    }
-    if (!/^[A-Za-z]+$/.test(formData.lastName)) {
-      newErrors.lastName = "Last name should contain only letters.";
+    if (!/^[A-Za-z]+$/.test(formData.username)) {
+      newErrors.firstName = "Username should contain only letters.";
     }
     if (!validateEmail(formData.email)) {
       newErrors.email = "Invalid email format.";
@@ -58,6 +57,23 @@ export function Register() {
       setErrors(newErrors);
       return;
     }
+
+    const res = await createUserWithEmailAndPassword(
+      auth,
+      formData.email,
+      formData.password
+    );
+
+    await setDoc(doc(db, "users", res.user.uid), {
+      username: formData.username,
+      email: formData.email,
+      id: res.user.uid,
+      blocked: [],
+    });
+
+    await setDoc(doc(db, "userchats", res.user.uid), {
+      chats: [],
+    });
   };
 
   const handleChange = (e: React.ChangeEvent<HTMLInputElement>) => {
@@ -72,21 +88,13 @@ export function Register() {
       <div className="register_container">
         Login
         <input
-          id="firstName"
-          name="firstName"
+          id="username"
+          name="username"
           type="text"
-          placeholder="First Name"
+          placeholder="Username"
           onChange={handleChange}
         />
-        {errors.firstName && <span>{errors.firstName}</span>}
-        <input
-          id="lastName"
-          name="lastName"
-          type="text"
-          placeholder="Last Name"
-          onChange={handleChange}
-        />
-        {errors.lastName && <span>{errors.lastName}</span>}
+        {errors.username && <span>{errors.username}</span>}
         <input
           id="email"
           name="email"
@@ -112,7 +120,6 @@ export function Register() {
         />
         {errors.confirmPassword && <span>{errors.confirmPassword}</span>}
         <button onClick={onClickRegister}>REGISTER</button>
-        <a href="/login">Login</a>
       </div>
     </>
   );

@@ -1,5 +1,4 @@
 import { useState } from "react";
-import "./LoginStyle.scss";
 
 export function Login() {
   const [email, setEmail] = useState<string>("");
@@ -28,7 +27,6 @@ export function Login() {
           <input type="checkbox" name="rememberMe" id="rememberMe" />
           Remember me?
         </label>
-        <a href="/register">Register</a>
       </div>
     </>
   );

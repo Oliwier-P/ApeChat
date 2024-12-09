@@ -4,7 +4,11 @@ import { auth, db } from "../../lib/firebase";
 import { createUserWithEmailAndPassword } from "firebase/auth";
 import { doc, setDoc } from "firebase/firestore";
 
-export function Register() {
+type RegisterProps = {
+  onClick: () => void;
+};
+
+export function Register({ onClick }: RegisterProps) {
   const [formData, setFormData] = useState({
     username: "",
     email: "",
@@ -34,26 +38,33 @@ export function Register() {
       if (formData[key as keyof typeof formData] === "") {
         newErrors[key] = `${key} is required.`;
         setErrors(newErrors);
-        return;
       }
+    }
+
+    if (Object.keys(newErrors).length > 0) {
+      setErrors(newErrors);
+      return;
     }
 
     // Validation checks
     if (!/^[A-Za-z]+$/.test(formData.username)) {
       newErrors.firstName = "Username should contain only letters.";
+      setErrors(newErrors);
+      return;
     }
     if (!validateEmail(formData.email)) {
       newErrors.email = "Invalid email format.";
+      setErrors(newErrors);
+      return;
     }
     if (formData.password !== formData.confirmPassword) {
       newErrors.confirmPassword = "Passwords do not match.";
+      setErrors(newErrors);
+      return;
     }
     if (!validatePassword(formData.password)) {
       newErrors.password =
         "Password must be 8-32 characters long, include 1 uppercase letter, and 1 special character.";
-    }
-
-    if (Object.keys(newErrors).length > 0) {
       setErrors(newErrors);
       return;
     }
@@ -85,41 +96,54 @@ export function Register() {
 
   return (
     <>
-      <div className="register_container">
-        Login
-        <input
-          id="username"
-          name="username"
-          type="text"
-          placeholder="Username"
-          onChange={handleChange}
-        />
-        {errors.username && <span>{errors.username}</span>}
-        <input
-          id="email"
-          name="email"
-          type="email"
-          placeholder="Email"
-          onChange={handleChange}
-        />
-        {errors.email && <span>{errors.email}</span>}
-        <input
-          id="password"
-          name="password"
-          type="password"
-          placeholder="Password"
-          onChange={handleChange}
-        />
-        {errors.password && <span>{errors.password}</span>}
-        <input
-          id="confirmPassword"
-          name="confirmPassword"
-          type="password"
-          placeholder="Password"
-          onChange={handleChange}
-        />
-        {errors.confirmPassword && <span>{errors.confirmPassword}</span>}
-        <button onClick={onClickRegister}>REGISTER</button>
+      <div className="container">
+        <div className="app_title">ApeChat</div>
+        <div className="auth_container register_container">
+          <input
+            className="custom_input"
+            id="username"
+            name="username"
+            type="text"
+            placeholder="Username"
+            onChange={handleChange}
+          />
+          {errors.username && <span className="input_error">{errors.username}</span>}
+          <input
+            className="custom_input"
+            id="email"
+            name="email"
+            type="email"
+            placeholder="Email"
+            onChange={handleChange}
+          />
+          {errors.email && <span className="input_error">{errors.email}</span>}
+          <input
+            className="custom_input"
+            id="password"
+            name="password"
+            type="password"
+            placeholder="Password"
+            onChange={handleChange}
+          />
+          {errors.password && <span className="input_error">{errors.password}</span>}
+          <input
+            className="custom_input"
+            id="confirmPassword"
+            name="confirmPassword"
+            type="password"
+            placeholder="Password"
+            onChange={handleChange}
+          />
+          {errors.confirmPassword && (
+            <span className="input_error">{errors.confirmPassword}</span>
+          )}
+          <button className="custom_button" onClick={onClickRegister}>
+            REGISTER
+          </button>
+          <div className="form_link" onClick={onClick}>
+            Already have an account?
+          </div>
+        </div>
       </div>
     </>
   );

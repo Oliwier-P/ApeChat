@@ -17,14 +17,12 @@ export function Auth() {
       <div>
         {isLogin && (
           <>
-            <Login />
-            <button onClick={changeForm}>Sign up</button>
+            <Login onClick={changeForm} />
           </>
         )}
         {!isLogin && (
           <>
-            <Register />
-            <button onClick={changeForm}>Login</button>
+            <Register onClick={changeForm} />
           </>
         )}
       </div>

@@ -1,0 +1,35 @@
+.messages_container {
+  width: 100%;
+  height: calc(100% - 120px);
+
+  color: white;
+
+  display: flex;
+  flex-direction: column;
+
+  margin-top: 20px;
+}
+
+.message {
+  width: max-content;
+  max-width: 40%;
+  padding: 15px;
+  background-color: antiquewhite;
+  border-radius: 20px;
+}
+
+.user {
+  align-self: flex-end;
+
+  background-color: #525252;
+
+  margin-right: 2%;
+}
+
+.friend {
+  align-self: flex-start;
+
+  background-color: #1c1c1c;
+
+  margin-left: 2%;
+}

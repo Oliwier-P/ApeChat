@@ -9,6 +9,7 @@ import { ChatList as List } from "../../components/ChatList";
 import { onAuthStateChanged } from "firebase/auth";
 import { auth } from "../../lib/firebase";
 import { useUserStore } from "../../lib/userStore";
+import { Loading } from "../../components/Loading/Loading";
 
 export function Chat() {
   const { currentUser, fetchUserInfo }: any = useUserStore();
@@ -23,15 +24,23 @@ export function Chat() {
     };
   }, [fetchUserInfo]);
 
+  useEffect(() => {
+    console.log(currentUser);
+  }, [currentUser]);
+
   return (
     <>
-      <div className="chat_container">
-        <List />
-        <div className="chat_content">
-          <Header />
-          <Messages />
+      {!currentUser ? (
+        <Loading />
+      ) : (
+        <div className="chat_container">
+          <List />
+          <div className="chat_content">
+            <Header />
+            <Messages />
+          </div>
         </div>
-      </div>
+      )}
     </>
   );
 }

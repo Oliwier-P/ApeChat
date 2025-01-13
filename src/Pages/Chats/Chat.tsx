@@ -24,10 +24,6 @@ export function Chat() {
     };
   }, [fetchUserInfo]);
 
-  useEffect(() => {
-    console.log(currentUser);
-  }, [currentUser]);
-
   return (
     <>
       {!currentUser ? (

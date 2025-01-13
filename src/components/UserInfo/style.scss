@@ -24,8 +24,15 @@
   }
 
   .username {
-    font-size: 200%;
+    max-width: 60%;
 
-    margin-left: 20px;
+    font-size: 150%;
+    margin-left: 15px;
+
+    display: inline-block;
+
+    white-space: nowrap;
+    overflow: hidden;
+    text-overflow: ellipsis;
   }
 }

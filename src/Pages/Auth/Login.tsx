@@ -14,7 +14,9 @@ export function Login({ onClick }: LoginProps) {
   const [rememberMe, setRememberMe] = useState<boolean>(false);
   const navigate = useNavigate();
 
-  const onClickLogin = async () => {
+  const onClickLogin = async (e: React.FormEvent) => {
+    e.preventDefault();
+
     try {
       await signInWithEmailAndPassword(auth, email, password);
       navigate("/chats");
@@ -27,12 +29,13 @@ export function Login({ onClick }: LoginProps) {
     <>
       <div className="container">
         <div className="app_title">ApeChat</div>
-        <div className="auth_container login_container">
+        <form className="auth_container login_container" onSubmit={onClickLogin}>
           <input
             className="custom_input"
             id="email"
             type="email"
             placeholder="Email"
+            autoComplete="email"
             onChange={(e) => setEmail(e.target.value)}
           />
           <input
@@ -40,8 +43,10 @@ export function Login({ onClick }: LoginProps) {
             id="password"
             type="password"
             placeholder="Password"
+            autoComplete="password"
             onChange={(e) => setPassword(e.target.value)}
           />
+
           <div className="div_checkbox_remember">
             <input
               type="checkbox"
@@ -52,13 +57,13 @@ export function Login({ onClick }: LoginProps) {
             <span className="checkmark"></span>
             Remember me?
           </div>
-          <button className="custom_button" onClick={onClickLogin}>
+          <button className="custom_button" type="submit">
             LOGIN
           </button>
           <div className="form_link" onClick={onClick}>
             Create new account
           </div>
-        </div>
+        </form>
       </div>
     </>
   );

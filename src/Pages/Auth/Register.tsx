@@ -18,73 +18,114 @@ export function Register({ onClick }: RegisterProps) {
 
   const [errors, setErrors] = useState<{ [key: string]: string }>({});
 
-  const onClickRegister = async () => {
-    const validateEmail = (email: string): boolean => {
-      const emailRegex =
-        /^(([^<>()[\]\\.,;:\s@\"]+(\.[^<>()[\]\\.,;:\s@\"]+)*)|(\".+\"))@((\[[0-9]{1,3}\.[0-9]{1,3}\.[0-9]{1,3}\.[0-9]{1,3}\])|(([a-zA-Z\-0-9]+\.)+[a-zA-Z]{2,}))$/;
-      return emailRegex.test(email);
-    };
+  // const onClickRegister = async () => {
+  //   const validateEmail = (email: string): boolean => {
+  //     const emailRegex =
+  //       /^(([^<>()[\]\\.,;:\s@\"]+(\.[^<>()[\]\\.,;:\s@\"]+)*)|(\".+\"))@((\[[0-9]{1,3}\.[0-9]{1,3}\.[0-9]{1,3}\.[0-9]{1,3}\])|(([a-zA-Z\-0-9]+\.)+[a-zA-Z]{2,}))$/;
+  //     return emailRegex.test(email);
+  //   };
 
-    const validatePassword = (password: string): boolean => {
-      const passwordRegex =
-        /^(?=.*[A-Z])(?=.*[!@#$%^&*(),.?":{}|<>])[A-Za-z\d!@#$%^&*(),.?":{}|<>]{8,32}$/;
-      return passwordRegex.test(password);
-    };
+  //   const validatePassword = (password: string): boolean => {
+  //     const passwordRegex =
+  //       /^(?=.*[A-Z])(?=.*[!@#$%^&*(),.?":{}|<>])[A-Za-z\d!@#$%^&*(),.?":{}|<>]{8,32}$/;
+  //     return passwordRegex.test(password);
+  //   };
 
-    const newErrors: { [key: string]: string } = {};
+  //   const newErrors: { [key: string]: string } = {};
 
-    // Check for empty fields
-    for (const key in formData) {
-      if (formData[key as keyof typeof formData] === "") {
-        newErrors[key] = `${key} is required.`;
-        setErrors(newErrors);
+  //   // Check for empty fields
+  //   for (const key in formData) {
+  //     if (formData[key as keyof typeof formData] === "") {
+  //       newErrors[key] = `${key} is required.`;
+  //       setErrors(newErrors);
+  //     }
+  //   }
+
+  //   if (Object.keys(newErrors).length > 0) {
+  //     setErrors(newErrors);
+  //     return;
+  //   }
+
+  //   // Validation checks
+  //   if (!/^[A-Za-z]+$/.test(formData.username)) {
+  //     newErrors.firstName = "Username should contain only letters.";
+  //     setErrors(newErrors);
+  //     return;
+  //   }
+  //   if (!validateEmail(formData.email)) {
+  //     newErrors.email = "Invalid email format.";
+  //     setErrors(newErrors);
+  //     return;
+  //   }
+  //   if (formData.password !== formData.confirmPassword) {
+  //     newErrors.confirmPassword = "Passwords do not match.";
+  //     setErrors(newErrors);
+  //     return;
+  //   }
+  //   if (!validatePassword(formData.password)) {
+  //     newErrors.password =
+  //       "Password must be 8-32 characters long, include 1 uppercase letter, and 1 special character.";
+  //     setErrors(newErrors);
+  //     return;
+  //   }
+
+  //   try {
+  //     alert("User created");
+
+  //     const res = await createUserWithEmailAndPassword(
+  //       auth,
+  //       formData.email,
+  //       formData.password
+  //     );
+
+  //     console.log(formData);
+  //     console.log(res);
+
+  //     await setDoc(doc(db, "users", res.user.uid), {
+  //       username: formData.username,
+  //       email: formData.email,
+  //       id: res.user.uid,
+  //       blocked: [],
+  //     });
+
+  //     await setDoc(doc(db, "userchats", res.user.uid), {
+  //       chats: [],
+  //     });
+  //   } catch (err) {
+  //     console.log(err);
+  //   }
+  // };
+
+  const temp = async () => {
+    try {
+      const res = await createUserWithEmailAndPassword(
+        auth,
+        formData.email,
+        formData.password
+      );
+
+      console.log(res);
+
+      await setDoc(doc(db, "users", res.user.uid), {
+        username: formData.username,
+        email: formData.email,
+        id: res.user.uid,
+        blocked: [],
+      });
+
+      await setDoc(doc(db, "userchats", res.user.uid), {
+        chats: [],
+      });
+
+      alert("Created user successfully");
+    } catch (err: any) {
+      if (err.code === "auth/email-already-in-use") {
+        alert("This email is unavailable. Please try another one.");
+      } else {
+        console.log(err);
+        alert("An error occurred. Please try again later.");
       }
     }
-
-    if (Object.keys(newErrors).length > 0) {
-      setErrors(newErrors);
-      return;
-    }
-
-    // Validation checks
-    if (!/^[A-Za-z]+$/.test(formData.username)) {
-      newErrors.firstName = "Username should contain only letters.";
-      setErrors(newErrors);
-      return;
-    }
-    if (!validateEmail(formData.email)) {
-      newErrors.email = "Invalid email format.";
-      setErrors(newErrors);
-      return;
-    }
-    if (formData.password !== formData.confirmPassword) {
-      newErrors.confirmPassword = "Passwords do not match.";
-      setErrors(newErrors);
-      return;
-    }
-    if (!validatePassword(formData.password)) {
-      newErrors.password =
-        "Password must be 8-32 characters long, include 1 uppercase letter, and 1 special character.";
-      setErrors(newErrors);
-      return;
-    }
-
-    const res = await createUserWithEmailAndPassword(
-      auth,
-      formData.email,
-      formData.password
-    );
-
-    await setDoc(doc(db, "users", res.user.uid), {
-      username: formData.username,
-      email: formData.email,
-      id: res.user.uid,
-      blocked: [],
-    });
-
-    await setDoc(doc(db, "userchats", res.user.uid), {
-      chats: [],
-    });
   };
 
   const handleChange = (e: React.ChangeEvent<HTMLInputElement>) => {
@@ -105,6 +146,7 @@ export function Register({ onClick }: RegisterProps) {
             name="username"
             type="text"
             placeholder="Username"
+            autoComplete="username"
             onChange={handleChange}
           />
           {errors.username && <span className="input_error">{errors.username}</span>}
@@ -114,6 +156,7 @@ export function Register({ onClick }: RegisterProps) {
             name="email"
             type="email"
             placeholder="Email"
+            autoComplete="email"
             onChange={handleChange}
           />
           {errors.email && <span className="input_error">{errors.email}</span>}
@@ -123,6 +166,7 @@ export function Register({ onClick }: RegisterProps) {
             name="password"
             type="password"
             placeholder="Password"
+            autoComplete="password"
             onChange={handleChange}
           />
           {errors.password && <span className="input_error">{errors.password}</span>}
@@ -131,13 +175,14 @@ export function Register({ onClick }: RegisterProps) {
             id="confirmPassword"
             name="confirmPassword"
             type="password"
-            placeholder="Password"
+            placeholder="Confirm Password"
+            autoComplete="password"
             onChange={handleChange}
           />
           {errors.confirmPassword && (
             <span className="input_error">{errors.confirmPassword}</span>
           )}
-          <button className="custom_button" onClick={onClickRegister}>
+          <button className="custom_button" type="submit" onClick={temp}>
             REGISTER
           </button>
           <div className="form_link" onClick={onClick}>

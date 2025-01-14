@@ -1,0 +1,28 @@
+.search_container {
+  width: 70%;
+
+  position: relative;
+  display: flex;
+  justify-content: center;
+
+  img {
+    position: absolute;
+    top: 5px;
+    left: 5px;
+  }
+
+  .searchbar {
+    height: 40px;
+    width: 100%;
+
+    background-color: #1c1c1c;
+    color: white;
+
+    border-radius: 10px;
+    box-sizing: border-box;
+    border: none;
+    outline: none;
+
+    padding-left: 40px;
+  }
+}

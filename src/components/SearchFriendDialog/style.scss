@@ -1,0 +1,88 @@
+.dialog_overlay {
+  width: 100vw;
+  height: 100vh;
+
+  background: rgba(0, 0, 0, 0.5);
+
+  position: fixed;
+  top: 0;
+  left: 0;
+
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  z-index: 1000;
+}
+
+.dialog {
+  width: 350px;
+  max-width: 90%;
+  height: 420px;
+
+  background: #242424;
+  border-radius: 8px;
+  box-shadow: 0 4px 8px rgba(0, 0, 0, 0.2);
+  text-align: center;
+  padding-top: 20px;
+
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+
+  @media only screen and (max-height: 420px) {
+    position: absolute;
+    top: 0;
+  }
+
+  .search_container {
+    width: 90%;
+    display: flex;
+    flex-wrap: nowrap;
+    justify-content: space-between;
+    align-self: auto;
+    margin-bottom: 10px;
+  }
+
+  .exit {
+    color: white;
+    font-weight: 700;
+    cursor: pointer;
+  }
+
+  .list_container {
+    max-height: 350px;
+    width: 95%;
+
+    position: relative;
+    display: flex;
+    flex-direction: column;
+    overflow-y: auto;
+
+    .user_container {
+      width: 100%;
+
+      display: flex;
+      justify-content: space-around;
+      align-items: center;
+
+      button {
+        background-color: #1c1c1c;
+        color: white;
+        border: none;
+        cursor: pointer;
+        margin-bottom: 20px;
+      }
+    }
+  }
+
+  .list_container::-webkit-scrollbar {
+    width: 7px;
+    border-radius: 10px;
+    background-color: #1c1c1c;
+  }
+
+  .list_container::-webkit-scrollbar-thumb {
+    border-radius: 10px;
+    background-color: #525252;
+  }
+}

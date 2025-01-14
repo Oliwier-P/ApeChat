@@ -4,7 +4,7 @@ export function ChatHeader() {
   return (
     <>
       <div className="chat_content_header">
-        <UserInfo />
+        <UserInfo username="Friend" />
       </div>
     </>
   );

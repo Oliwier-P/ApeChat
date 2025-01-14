@@ -1,15 +1,17 @@
+import { AddButton } from "../AddButton/AddButton";
+import { InputSearch } from "../InputSearch/InputSearch";
 import "./style.scss";
-import glass from "./../../assets/magnifying-glass.svg";
 
-export function SearchContainer() {
+type SearchContainerProps = {
+  handleDisplayAddFriend: () => void;
+};
+
+export function SearchContainer({ handleDisplayAddFriend }: SearchContainerProps) {
   return (
     <>
       <div className="friend_search">
-        <div className="search_container">
-          <img src={glass} alt="magnifying-glass" />
-          <input className="searchbar" placeholder="Search" />
-        </div>
-        <button className="add_friend">+</button>
+        <InputSearch width="100%" />
+        <AddButton onClick={handleDisplayAddFriend} />
       </div>
     </>
   );
